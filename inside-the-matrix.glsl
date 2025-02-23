@@ -248,7 +248,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return;
     }
 
-    vec2 uv = fragCoord.xy / iResolution.xy;
+    // Invert the y-coordinate for the terminal screen texture
+    vec2 uv = fragCoord / iResolution.xy;
+
+    // Invert the y-coordinate for the moving green cells
+    vec2 uvInverted = vec2(fragCoord.x, iResolution.y - fragCoord.y) / iResolution.xy;
 
     float time = iTime * SPEED;
 
@@ -261,7 +265,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float gap_size = float(BLOCK_GAP) * XYCELL_SIZE;
 
     vec3 ro = vec3(gap_size/2., gap_size/2., 0.);
-    vec3 rd = vec3(uv.x, 2.0, uv.y);
+    // Adjust the field of view by reducing the y component (middle value)
+    vec3 rd = vec3(uvInverted.x, 1.0, uvInverted.y); // Changed from 2.0 to 1.0
 
     float tq = fract(time / (level2_size*4.) * WALK_SPEED);  //the whole cycle time counter
     float t8 = fract(tq*4.);  //time counter while walking on one of the four big sides
@@ -399,11 +404,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     // vec3 col = rain(ro, rd, time);
     vec3 col = rain(ro, rd, time) * 0.25;
 
-  	// Sample the terminal screen texture including alpha channel
-  	vec4 terminalColor = texture(iChannel0, uv);
-  
-  	// Combine the matrix effect with the terminal color
-  	// vec3 blendedColor = terminalColor.rgb + col;
+    // Sample the terminal screen texture including alpha channel
+    vec4 terminalColor = texture(iChannel0, uv);
+
+    // Combine the matrix effect with the terminal color
+    // vec3 blendedColor = terminalColor.rgb + col;
 
     // Make a mask that is 1.0 where the terminal content is not black
     float mask = 1.2 - step(0.5, dot(terminalColor.rgb, vec3(1.0)));

@@ -1,8 +1,8 @@
 // transparent background
-const bool transparent = false;
+const bool transparent = true;
 
 // terminal contents luminance threshold to be considered background (0.0 to 1.0)
-const float threshold = 0.15;
+const float threshold = 0.8;
 
 // divisions of grid
 const float repeats = 30.;
@@ -71,7 +71,7 @@ float perlin2(vec2 uv, int octaves, float pscale) {
 }
 
 vec3 stars(vec2 uv, float offset) {
-    float timeScale = -(iTime + offset) / layers;
+    float timeScale = -(iTime/10 + offset) / layers;
     float trans = fract(timeScale);
     float newRnd = floor(timeScale);
     vec3 col = vec3(0.);
