@@ -8,14 +8,14 @@
 */
 
 const int ITERATIONS = 40;   //use less value if you need more performance
-const float SPEED = .5;
+const float SPEED = .3;
 
 const float STRIP_CHARS_MIN =  7.;
 const float STRIP_CHARS_MAX = 40.;
-const float STRIP_CHAR_HEIGHT = 0.15;
-const float STRIP_CHAR_WIDTH = 0.10;
+const float STRIP_CHAR_HEIGHT = 0.075;  // Reduced from 0.15
+const float STRIP_CHAR_WIDTH = 0.05;    // Reduced from 0.10
 const float ZCELL_SIZE = 1. * (STRIP_CHAR_HEIGHT * STRIP_CHARS_MAX);  //the multiplier can't be less than 1.
-const float XYCELL_SIZE = 12. * STRIP_CHAR_WIDTH;  //the multiplier can't be less than 1.
+const float XYCELL_SIZE = 12. * STRIP_CHAR_WIDTH;  // Reduced from 12.
 
 const int BLOCK_SIZE = 10;  //in cells
 const int BLOCK_GAP = 2;    //in cells
@@ -265,8 +265,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float gap_size = float(BLOCK_GAP) * XYCELL_SIZE;
 
     vec3 ro = vec3(gap_size/2., gap_size/2., 0.);
-    // Adjust the field of view by reducing the y component (middle value)
-    vec3 rd = vec3(uvInverted.x, 1.0, uvInverted.y); // Changed from 2.0 to 1.0
+    // Reduce the field of view by adjusting these values
+    vec3 rd = vec3(uvInverted.x * 0.75, 0.75, uvInverted.y * 0.75);
 
     float tq = fract(time / (level2_size*4.) * WALK_SPEED);  //the whole cycle time counter
     float t8 = fract(tq*4.);  //time counter while walking on one of the four big sides
